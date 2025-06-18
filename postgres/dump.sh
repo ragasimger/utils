@@ -1,4 +1,4 @@
-# Usage: ./backup_pg.sh <host> <port> <user> <database_name> <output_file.sql> <schema1,schema2,...>
+# Usage: ./dump.sh <host> <port> <user> <database_name> <output_file.sql> "<schema1,schema2,...>""
 # This script will export the db in sql format which can be restored for most of the versions with pg_restore
 
 HOST=$1
@@ -11,7 +11,7 @@ SCHEMA_LIST=$6
 # Validate arguments
 if [[ -z "$HOST" || -z "$PORT" || -z "$USER" || -z "$DB_NAME" || -z "$OUTPUT_FILE" || -z "$SCHEMA_LIST" ]]; then
   echo "❌ Error: Missing arguments."
-  echo "Usage: $0 <host> <port> <user> <database_name> <output_file.sql> <schema1,schema2,...>"
+  echo 'Usage: $0 <host> <port> <user> <database_name> <output_file.sql> "<schema1,schema2,...>"'
   exit 1
 fi
 
