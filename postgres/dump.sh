@@ -15,12 +15,24 @@ if [[ -z "$HOST" || -z "$PORT" || -z "$USER" || -z "$DB_NAME" || -z "$OUTPUT_FIL
   exit 1
 fi
 
+
+# Normalize schema list: remove spaces after commas
+SCHEMA_LIST=$(echo "$SCHEMA_LIST" | sed 's/, */,/g')
+
+# Split schemas by comma
+IFS=',' read -ra SCHEMAS <<< "$SCHEMA_LIST"
+
 # Split schemas from comma-separated to individual --schema flags
 SCHEMA_FLAGS=""
-IFS=',' read -ra SCHEMAS <<< "$SCHEMA_LIST"
 for schema in "${SCHEMAS[@]}"; do
   SCHEMA_FLAGS+=" --schema=$schema"
 done
+
+
+echo "Dumping database '$DB_NAME' from host '$HOST' port '$PORT' with user '$USER'"
+echo "Schemas: $SCHEMA_LIST"
+echo "Output file: $OUTPUT_FILE"
+
 
 # Run pg_dump
 pg_dump -h "$HOST" -p "$PORT" -U "$USER" -d "$DB_NAME" -F p -v -f "$OUTPUT_FILE" $SCHEMA_FLAGS
